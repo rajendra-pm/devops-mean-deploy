@@ -1,16 +1,20 @@
-# frontend/Dockerfile
-# build stage
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-# adjust build command if different
-RUN npm run build -- --output-path=dist --configuration=production
+# Stage 1: Build Angular app
+FROM node:18-alpine as builder
 
-# production stage
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build --configuration=production
+
+# Stage 2: Serve Angular app with Nginx
 FROM nginx:stable-alpine
+
 COPY --from=builder /app/dist /usr/share/nginx/html
-# Remove default nginx.conf and add our own if needed (we'll use separate reverse proxy nginx)
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]
