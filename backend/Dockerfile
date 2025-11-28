@@ -1,15 +1,11 @@
-FROM node:18-alpine
+FROM node:18
 
 WORKDIR /app
 
-# copy package.json and lock file if present
 COPY package*.json ./
+RUN npm install
 
-# install production dependencies only
-RUN npm install --only=production
-
-# copy source code
 COPY . .
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
