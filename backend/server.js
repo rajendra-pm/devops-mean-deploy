@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 // 🔥 Simple test API
 app.get("/api/test", (req, res) => {
-  res.json({ message: "Backend running successfully 🚀" });
+  res.send({ message: "Backend running successfully 🚀" });
 });
 
 // MongoDB connection
