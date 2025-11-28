@@ -1,19 +1,15 @@
-# backend/Dockerfile
 FROM node:18-alpine
 
 WORKDIR /app
 
-# copy package files first for caching
+# copy package.json and lock file if present
 COPY package*.json ./
 
-RUN npm ci --only=production
+# install production dependencies only
+RUN npm install --only=production
 
-# copy source
+# copy source code
 COPY . .
 
-# expose port used by backend (change if your app uses other port)
-ENV PORT=3000
 EXPOSE 3000
-
-# start (expects "start" script in package.json)
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
